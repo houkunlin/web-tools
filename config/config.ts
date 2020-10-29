@@ -64,6 +64,18 @@ export default defineConfig({
       component: './Welcome',
     },
     {
+      path: 'utils',
+      name: 'utils',
+      icon: 'aim',
+      routes: [
+        {
+          path: 'StompClient',
+          name: 'StompClient',
+          component: './StompClient',
+        },
+      ]
+    },
+    {
       path: '/',
       redirect: '/index',
     },
