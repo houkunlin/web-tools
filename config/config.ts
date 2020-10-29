@@ -64,12 +64,6 @@ export default defineConfig({
       component: './Welcome',
     },
     {
-      name: 'list.table-list',
-      icon: 'table',
-      path: '/list',
-      component: './ListTableList',
-    },
-    {
       path: '/',
       redirect: '/index',
     },
