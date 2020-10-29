@@ -12,11 +12,11 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Ant Design Pro',
+  title: '小侯',
   pwa: false,
   logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
-  splitMenus: false
+  splitMenus: false,
 } as LayoutSettings & {
   pwa: boolean;
 };

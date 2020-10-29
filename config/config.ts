@@ -73,7 +73,7 @@ export default defineConfig({
           name: 'StompClient',
           component: './StompClient',
         },
-      ]
+      ],
     },
     {
       path: '/',
@@ -99,6 +99,16 @@ export default defineConfig({
   manifest: {
     basePath: '/',
   },
+  metas: [
+    {
+      name: 'keywords',
+      content: '侯坤林, 十二后花园, 小十二',
+    },
+    {
+      name: 'description',
+      content: '侯坤林的个人工具箱',
+    },
+  ],
   // base: '.',
   // https://umijs.org/zh-CN/docs/deployment#html-%E5%90%8E%E7%BC%80
   // exportStatic: {
