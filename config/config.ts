@@ -59,9 +59,8 @@ export default defineConfig({
     },
     {
       path: '/index',
-      name: 'welcome',
-      icon: 'smile',
-      component: './Welcome',
+      name: 'home',
+      component: './Home',
     },
     {
       path: 'utils',
