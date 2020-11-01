@@ -26,7 +26,9 @@ export default defineConfig({
     // skipModelValidate: true,
   },
   layout: {
-    name: 'Ant Design Pro',
+    // https://umijs.org/zh-CN/plugins/plugin-layout#name
+    // 产品名，默认值为包名。Default: name in package.json
+    name: defaultSettings.siteTitle,
     locale: true,
     ...defaultSettings,
   },

@@ -3,10 +3,10 @@ import { Card, Col, Row, Typography } from 'antd';
 import { ConnectProps } from '@@/plugin-dva/connect';
 import { connect, history, Link } from 'umi';
 import { Helmet } from '@@/plugin-helmet/exports';
-import { Settings as LayoutSettings } from '@ant-design/pro-layout';
+import { DefaultSettings } from '../../config/defaultSettings'
 
 interface Props extends ConnectProps {
-  settings: LayoutSettings | null;
+  settings: DefaultSettings | null;
 }
 
 class Home extends React.Component<Props, any> {
@@ -24,7 +24,7 @@ class Home extends React.Component<Props, any> {
     return (
       <>
         <Helmet>
-          <title>十二后花园{settings?.title ? ` - ${settings.title}` : ''}</title>
+          <title>{settings?.siteTitle}</title>
         </Helmet>
         <Typography.Title level={2}>工具列表</Typography.Title>
         <Row gutter={10}>
