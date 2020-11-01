@@ -3,13 +3,15 @@ import { Button, Checkbox, Form, Input, message } from 'antd';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { FormInstance } from 'antd/lib/form';
-import { useModel } from "@@/plugin-model/useModel";
-import { v4 as uuid } from 'uuid'
+import { useModel } from '@@/plugin-model/useModel';
+import { v4 as uuid } from 'uuid';
 
 export default () => {
-  const [id] = useState(uuid())
+  const [id] = useState(uuid());
   // Stomp客户端连接
-  const { state: { client } } = useModel('StompClient.connect');
+  const {
+    state: { client },
+  } = useModel('StompClient.connect');
   // 当前正在订阅的ID
   const [subscribeId, setSubscribeId] = useState<string | null>(null);
   // 当前结果内容
@@ -21,15 +23,13 @@ export default () => {
 
   // 订阅事件
   const onSubscribe = (values: any) => {
-    console.log('订阅数据', values);
     if (client == null) {
       message.error('未连接服务器');
       return;
     }
     // 创建一个订阅
     const subscribe = client.subscribe(values.uri, (msg) => {
-      console.log('接收数据', values.uri, msg);
-      let newResult = result
+      let newResult = result;
       if (openLongLog) {
         newResult += msg.body;
       } else if (msg.headers['content-type'] === 'application/json') {
@@ -38,10 +38,9 @@ export default () => {
         newResult = msg.body;
       }
       newResult += '\r\n';
-      setResult(newResult)
+      setResult(newResult);
     });
-    console.log('订阅数据', subscribe);
-    setSubscribeId(subscribe.id)
+    setSubscribeId(subscribe.id);
   };
 
   // 取消订阅事件
@@ -50,15 +49,14 @@ export default () => {
       message.error('未连接服务器');
       return;
     }
-    console.log('取消订阅', subscribeId);
     setSubscribeId(null);
     client.unsubscribe(subscribeId!!);
   };
 
   // 表单内容改变，持续日志状态改变
-  const onValuesChange = (changedValues: any, allValues: any) => {
+  const onValuesChange = (changedValues: any) => {
     if (changedValues.longLog != null) {
-      setOpenLongLog(changedValues.longLog)
+      setOpenLongLog(changedValues.longLog);
     }
   };
 
@@ -66,7 +64,7 @@ export default () => {
   const isSubscribe = () => {
     if (client == null) {
       if (subscribeId != null) {
-        setSubscribeId(null)
+        setSubscribeId(null);
       }
       return false;
     }
@@ -79,9 +77,11 @@ export default () => {
     // 仅在创建组件时运行
     // https://reactjs.org/docs/hooks-reference.html#cleaning-up-an-effect
     // https://reactjs.org/docs/hooks-reference.html#conditionally-firing-an-effect
-    console.log('创建订阅面板', id)
+    // eslint-disable-next-line no-console
+    console.log('创建订阅面板', id);
     return () => {
       // 仅在销毁组件时运行
+      // eslint-disable-next-line no-console
       console.log('销毁订阅面板', id, '取消订阅', subscribeId);
       setSubscribeId(null);
       client?.unsubscribe(subscribeId!!);
@@ -104,10 +104,14 @@ export default () => {
         </Form.Item>
         <Form.Item>
           {!isSub && (
-            <Button type="primary" htmlType="submit">订阅</Button>
+            <Button type="primary" htmlType="submit">
+              订阅
+            </Button>
           )}
           {isSub && (
-            <Button danger onClick={onUnsubscribe}>取消订阅</Button>
+            <Button danger onClick={onUnsubscribe}>
+              取消订阅
+            </Button>
           )}
         </Form.Item>
         <Form.Item name="longLog" valuePropName="checked">
@@ -119,4 +123,4 @@ export default () => {
       </SyntaxHighlighter>
     </div>
   );
-}
+};

@@ -4,9 +4,9 @@ import './index.less';
 import { v4 as uuid } from 'uuid';
 import { PageContainer } from '@ant-design/pro-layout';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import { useModel } from "@@/plugin-model/useModel";
-import Connect from "./Connect";
-import Send from "./Send";
+import { useModel } from '@@/plugin-model/useModel';
+import Connect from './Connect';
+import Send from './Send';
 import Subscribe from './Subscribe';
 
 const { TabPane } = Tabs;
@@ -21,7 +21,9 @@ const defaultKey = uuid();
 
 export default () => {
   // Stomp 连接客户端
-  const { state: { client } } = useModel('StompClient.connect');
+  const {
+    state: { client },
+  } = useModel('StompClient.connect');
   // 发送面板激活的key
   const [sendActiveKey, setSendActiveKey] = useState(defaultKey);
   // 订阅面板激活的key
@@ -45,7 +47,6 @@ export default () => {
 
   // Tabs发送面板被编辑事件
   const onEditSendTabs = (targetKey: any, action: string) => {
-    console.log('onEditSendTabs', targetKey, action);
     const tabs = sendTabs;
     const activeKey = sendActiveKey;
     if (action === 'add') {
@@ -56,8 +57,8 @@ export default () => {
         closable: tabs.length > 0,
       };
       tabs.push(item);
-      setSendTabs(tabs)
-      setSendActiveKey(key)
+      setSendTabs(tabs);
+      setSendActiveKey(key);
     } else if (action === 'remove') {
       const index = tabs.findIndex((pane) => pane.key === targetKey);
       const newSendTabs = tabs.filter((pane) => pane.key !== targetKey);
@@ -65,14 +66,13 @@ export default () => {
       if (newSendTabs.length && activeKey === targetKey) {
         newActiveKey = newSendTabs[index >= 0 ? index - 1 : 0].key;
       }
-      setSendTabs(newSendTabs)
-      setSendActiveKey(newActiveKey)
+      setSendTabs(newSendTabs);
+      setSendActiveKey(newActiveKey);
     }
   };
 
   // Tabs订阅面板被编辑事件
   const onEditSubscribeTabs = (targetKey: any, action: string) => {
-    console.log('onEditSendTabs', targetKey, action);
     const tabs = subscribeTabs;
     const activeKey = subscribeKey;
     if (action === 'add') {
@@ -84,7 +84,7 @@ export default () => {
       };
       tabs.push(item);
       setSubscribeTabs(tabs);
-      setSubscribeKey(key)
+      setSubscribeKey(key);
     } else if (action === 'remove') {
       const index = tabs.findIndex((pane) => pane.key === targetKey);
       const newTabs = tabs.filter((pane) => pane.key !== targetKey);
@@ -93,15 +93,14 @@ export default () => {
         newActiveKey = newTabs[index >= 0 ? index - 1 : 0].key;
       }
       setSubscribeTabs(newTabs);
-      setSubscribeKey(newActiveKey)
+      setSubscribeKey(newActiveKey);
     }
   };
 
   // 当前Stomp客户端中订阅的列表
   const subscriptionKeys = client != null ? Object.keys(client.subscriptions) : [];
   const menu = (
-    <Menu onClick={() => {
-    }}>
+    <Menu onClick={() => {}}>
       {subscriptionKeys.map((key) => (
         <Menu.Item key={key} icon={<UserOutlined />}>
           {key}
@@ -132,7 +131,7 @@ export default () => {
               onEdit={onEditSendTabs}
               activeKey={sendActiveKey}
               onChange={(activeKey: string) => {
-                setSendActiveKey(activeKey)
+                setSendActiveKey(activeKey);
               }}
             >
               {sendTabs.map((pane) => (
@@ -150,7 +149,7 @@ export default () => {
               onEdit={onEditSubscribeTabs}
               activeKey={subscribeKey}
               onChange={(activeKey: string) => {
-                setSubscribeKey(activeKey)
+                setSubscribeKey(activeKey);
               }}
               tabBarExtraContent={{
                 right: tabBarExtraContent,
@@ -167,4 +166,4 @@ export default () => {
       </Row>
     </PageContainer>
   );
-}
+};

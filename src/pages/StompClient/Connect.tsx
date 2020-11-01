@@ -4,10 +4,10 @@ import { Headers } from '@/pages/StompClient/Headers';
 import { FormInstance } from 'antd/lib/form';
 import Stomp, { Frame } from 'stompjs';
 import SockJS from 'sockjs-client';
-import { useModel } from "@@/plugin-model/useModel";
+import { useModel } from '@@/plugin-model/useModel';
 
 export default () => {
-  const { state, setState } = useModel('StompClient.connect')
+  const { state, setState } = useModel('StompClient.connect');
   // 表单实例
   const formRef = useRef<FormInstance>(null);
   // header实例
@@ -18,21 +18,21 @@ export default () => {
     const { url = '' } = values;
     const headers: any = headerRef.current?.result() || {};
     const account = formRef.current?.getFieldsValue() || {};
-    console.log('连接服务器', values, headers, account);
     setState({ connecting: true, client: null });
     // 使用 STOMP 子协议的 WebSocket 客户端
-    const client = url.startsWith('ws') ? Stomp.over(new WebSocket(url)) : Stomp.over(new SockJS(url));
-    client.debug = () => {
-    };
+    const client = url.startsWith('ws')
+      ? Stomp.over(new WebSocket(url))
+      : Stomp.over(new SockJS(url));
+    client.debug = () => {};
 
     // 连接服务器成功
     const successFun = (frame?: Frame) => {
+      // eslint-disable-next-line no-console
       console.log('连接成功', frame);
       setState({ connecting: false, client });
     };
     // 连接服务器失败
     const errorFun = (error: Frame | string) => {
-      console.log('连接失败', error);
       setState({ connecting: false, client: null });
       message.error(`连接服务器失败：${error}`);
     };
@@ -57,18 +57,19 @@ export default () => {
   const { client, connecting } = state;
   return (
     <Spin spinning={connecting}>
-      <Form
-        layout="inline"
-        onFinish={onConnect}
-        initialValues={{ url: '' }}
-      >
+      <Form layout="inline" onFinish={onConnect} initialValues={{ url: '' }}>
         <Form.Item
           label="URL"
           name="url"
           rules={[{ required: true, message: '请输入连接地址!' }]}
           style={{ width: '500px' }}
         >
-          <Input placeholder="请输入链接地址" style={{ width: '100%' }} disabled={client != null} allowClear />
+          <Input
+            placeholder="请输入链接地址"
+            style={{ width: '100%' }}
+            disabled={client != null}
+            allowClear
+          />
         </Form.Item>
         <Form.Item>
           {client == null && (
@@ -80,7 +81,8 @@ export default () => {
             <Button type="primary" htmlType="button" danger onClick={onDisconnect}>
               断开连接
             </Button>
-          )}</Form.Item>
+          )}
+        </Form.Item>
       </Form>
       <Tabs>
         <Tabs.TabPane key="password" tab="Password">
@@ -99,4 +101,4 @@ export default () => {
       </Tabs>
     </Spin>
   );
-}
+};

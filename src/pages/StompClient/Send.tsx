@@ -1,18 +1,19 @@
 import React from 'react';
 import { Headers } from '@/pages/StompClient/Headers';
 import { Button, Form, Input, message } from 'antd';
-import { useModel } from "@@/plugin-model/useModel";
+import { useModel } from '@@/plugin-model/useModel';
 
 export default () => {
   // Stomp客户端连接
-  const { state: { client } } = useModel('StompClient.connect')
+  const {
+    state: { client },
+  } = useModel('StompClient.connect');
 
   const onSend = (values: any) => {
     if (client == null) {
       message.error('未连接服务器');
       return;
     }
-    console.log('发送', values);
     client.send(values.uri, {}, values.content);
   };
 
@@ -26,10 +27,12 @@ export default () => {
           <Input.TextArea placeholder="请输入发送内容" rows={6} allowClear />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">发送</Button>
+          <Button type="primary" htmlType="submit">
+            发送
+          </Button>
         </Form.Item>
       </Form>
       <Headers />
     </div>
   );
-}
+};
