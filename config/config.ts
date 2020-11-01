@@ -72,6 +72,11 @@ export default defineConfig({
           name: 'StompClient',
           component: './StompClient',
         },
+        {
+          path: 'JsonView',
+          name: 'JsonView',
+          component: './JsonView',
+        },
       ],
     },
     {
