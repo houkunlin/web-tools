@@ -1,9 +1,15 @@
 import React from 'react';
 import { Card, Col, Row, Typography } from 'antd';
 import { ConnectProps } from '@@/plugin-dva/connect';
-import { history, Link } from 'umi';
+import { connect, history, Link } from 'umi';
+import { Helmet } from '@@/plugin-helmet/exports';
+import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
-class Home extends React.Component<ConnectProps, any> {
+interface Props extends ConnectProps {
+  settings: LayoutSettings | null;
+}
+
+class Home extends React.Component<Props, any> {
   testJump = () => {
     history.push({
       pathname: '/index',
@@ -14,8 +20,12 @@ class Home extends React.Component<ConnectProps, any> {
   };
 
   render() {
+    const { settings } = this.props;
     return (
       <>
+        <Helmet>
+          <title>十二后花园{settings?.title ? ` - ${settings.title}` : ''}</title>
+        </Helmet>
         <Typography.Title level={2}>工具列表</Typography.Title>
         <Row gutter={10}>
           <Col span={4}>
@@ -38,4 +48,6 @@ class Home extends React.Component<ConnectProps, any> {
   }
 }
 
-export default Home;
+export default connect(({ settings }: any) => ({ settings }), null, null, { forwardRef: true })(
+  Home,
+);
