@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Col, Dropdown, Menu, Row, Tabs } from 'antd';
-import Connect from '@/pages/StompClient/Connect';
 import './index.less';
 import { v4 as uuid } from 'uuid';
-import { FormInstance } from 'antd/lib/form';
 import { PageContainer } from '@ant-design/pro-layout';
-import { connect } from 'umi';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import Send from './Send';
-import Subscribe, { SubscribeInstance } from './Subscribe';
+import { useModel } from "@@/plugin-model/useModel";
+import Connect from "./Connect";
+import Send from "./Send";
+import Subscribe from './Subscribe';
 
 const { TabPane } = Tabs;
 
@@ -18,48 +17,37 @@ export interface PageTabPane {
   closable: boolean;
 }
 
-interface State {
-  /**
-   * 发送者列表
-   */
-  sendTabs: PageTabPane[];
-  sendActiveKey: string;
-  /**
-   * 订阅者列表
-   */
-  subscribeTabs: PageTabPane[];
-  subscribeKey: string;
-}
-
 const defaultKey = uuid();
 
-class StompClient extends React.Component<any, State> {
-  formRef: React.RefObject<FormInstance> = React.createRef<FormInstance>();
+export default () => {
+  // Stomp 连接客户端
+  const { state: { client } } = useModel('StompClient.connect');
+  // 发送面板激活的key
+  const [sendActiveKey, setSendActiveKey] = useState(defaultKey);
+  // 订阅面板激活的key
+  const [subscribeKey, setSubscribeKey] = useState(defaultKey);
+  // 发送面板的列表内容
+  const [sendTabs, setSendTabs] = useState<PageTabPane[]>([
+    {
+      key: defaultKey,
+      title: '默认',
+      closable: false,
+    },
+  ]);
+  // 订阅面板的列表内容
+  const [subscribeTabs, setSubscribeTabs] = useState<PageTabPane[]>([
+    {
+      key: defaultKey,
+      title: '默认',
+      closable: false,
+    },
+  ]);
 
-  subscribeRefs: React.RefObject<SubscribeInstance>[] = [React.createRef<SubscribeInstance>()];
-
-  state: State = {
-    sendTabs: [
-      {
-        key: defaultKey,
-        title: '默认',
-        closable: false,
-      },
-    ],
-    sendActiveKey: defaultKey,
-    subscribeTabs: [
-      {
-        key: defaultKey,
-        title: '默认',
-        closable: false,
-      },
-    ],
-    subscribeKey: defaultKey,
-  };
-
-  onEditSendTabs = (targetKey: any, action: string) => {
+  // Tabs发送面板被编辑事件
+  const onEditSendTabs = (targetKey: any, action: string) => {
     console.log('onEditSendTabs', targetKey, action);
-    const { sendTabs: tabs, sendActiveKey: activeKey } = this.state;
+    const tabs = sendTabs;
+    const activeKey = sendActiveKey;
     if (action === 'add') {
       const key = uuid();
       const item: PageTabPane = {
@@ -68,7 +56,8 @@ class StompClient extends React.Component<any, State> {
         closable: tabs.length > 0,
       };
       tabs.push(item);
-      this.setState({ sendTabs: tabs, sendActiveKey: key });
+      setSendTabs(tabs)
+      setSendActiveKey(key)
     } else if (action === 'remove') {
       const index = tabs.findIndex((pane) => pane.key === targetKey);
       const newSendTabs = tabs.filter((pane) => pane.key !== targetKey);
@@ -76,116 +65,106 @@ class StompClient extends React.Component<any, State> {
       if (newSendTabs.length && activeKey === targetKey) {
         newActiveKey = newSendTabs[index >= 0 ? index - 1 : 0].key;
       }
-      this.setState({ sendTabs: newSendTabs, sendActiveKey: newActiveKey });
+      setSendTabs(newSendTabs)
+      setSendActiveKey(newActiveKey)
     }
   };
 
-  onEditSubscribeTabs = (targetKey: any, action: string) => {
+  // Tabs订阅面板被编辑事件
+  const onEditSubscribeTabs = (targetKey: any, action: string) => {
     console.log('onEditSendTabs', targetKey, action);
-    const { subscribeTabs: tabs, subscribeKey: activeKey } = this.state;
+    const tabs = subscribeTabs;
+    const activeKey = subscribeKey;
     if (action === 'add') {
       const key = uuid();
-      this.subscribeRefs.push(React.createRef<SubscribeInstance>());
       const item: PageTabPane = {
         title: `Tab-${tabs.length}`,
         key,
         closable: tabs.length > 0,
       };
       tabs.push(item);
-      this.setState({ subscribeTabs: tabs, subscribeKey: key });
+      setSubscribeTabs(tabs);
+      setSubscribeKey(key)
     } else if (action === 'remove') {
       const index = tabs.findIndex((pane) => pane.key === targetKey);
-      this.subscribeRefs[index].current?.destroy();
-      this.subscribeRefs.splice(index, 1);
       const newTabs = tabs.filter((pane) => pane.key !== targetKey);
       let newActiveKey = activeKey;
       if (newTabs.length && activeKey === targetKey) {
         newActiveKey = newTabs[index >= 0 ? index - 1 : 0].key;
       }
-      this.setState({ subscribeTabs: newTabs, subscribeKey: newActiveKey });
+      setSubscribeTabs(newTabs);
+      setSubscribeKey(newActiveKey)
     }
   };
 
-  render() {
-    const { sendTabs, sendActiveKey, subscribeTabs, subscribeKey } = this.state;
-    const { client } = this.props;
-    const subscriptionKeys = client != null ? Object.keys(client.subscriptions) : [];
-    const menu = (
-      <Menu onClick={() => {}}>
-        {subscriptionKeys.map((key) => (
-          <Menu.Item key={key} icon={<UserOutlined />}>
-            {key}
-          </Menu.Item>
-        ))}
-      </Menu>
-    );
-    let tabBarExtraContent = <div />;
-    if (subscriptionKeys.length > 0) {
-      tabBarExtraContent = (
-        <Dropdown overlay={menu} trigger={['click']}>
-          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-            所有订阅 <DownOutlined />
-          </a>
-        </Dropdown>
-      );
-    }
-    return (
-      <PageContainer>
-        <Card>
-          <Connect />
-        </Card>
-        <Row gutter={20}>
-          <Col span={10}>
-            <Card>
-              <Tabs
-                type="editable-card"
-                onEdit={this.onEditSendTabs}
-                activeKey={sendActiveKey}
-                onChange={(activeKey: string) => {
-                  this.setState({ sendActiveKey: activeKey });
-                }}
-              >
-                {sendTabs.map((pane) => (
-                  <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
-                    <Send />
-                  </TabPane>
-                ))}
-              </Tabs>
-            </Card>
-          </Col>
-          <Col span={14}>
-            <Card>
-              <Tabs
-                type="editable-card"
-                onEdit={this.onEditSubscribeTabs}
-                activeKey={subscribeKey}
-                onChange={(activeKey: string) => {
-                  this.setState({ subscribeKey: activeKey });
-                }}
-                tabBarExtraContent={{
-                  right: tabBarExtraContent,
-                }}
-              >
-                {subscribeTabs.map((pane, index) => (
-                  <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
-                    <Subscribe ref={this.subscribeRefs[index]} />
-                  </TabPane>
-                ))}
-              </Tabs>
-            </Card>
-          </Col>
-        </Row>
-      </PageContainer>
+  // 当前Stomp客户端中订阅的列表
+  const subscriptionKeys = client != null ? Object.keys(client.subscriptions) : [];
+  const menu = (
+    <Menu onClick={() => {
+    }}>
+      {subscriptionKeys.map((key) => (
+        <Menu.Item key={key} icon={<UserOutlined />}>
+          {key}
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+  let tabBarExtraContent = <div />;
+  if (subscriptionKeys.length > 0) {
+    tabBarExtraContent = (
+      <Dropdown overlay={menu} trigger={['click']}>
+        <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+          所有订阅 <DownOutlined />
+        </a>
+      </Dropdown>
     );
   }
+  return (
+    <PageContainer>
+      <Card>
+        <Connect />
+      </Card>
+      <Row gutter={20}>
+        <Col span={10}>
+          <Card>
+            <Tabs
+              type="editable-card"
+              onEdit={onEditSendTabs}
+              activeKey={sendActiveKey}
+              onChange={(activeKey: string) => {
+                setSendActiveKey(activeKey)
+              }}
+            >
+              {sendTabs.map((pane) => (
+                <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
+                  <Send />
+                </TabPane>
+              ))}
+            </Tabs>
+          </Card>
+        </Col>
+        <Col span={14}>
+          <Card>
+            <Tabs
+              type="editable-card"
+              onEdit={onEditSubscribeTabs}
+              activeKey={subscribeKey}
+              onChange={(activeKey: string) => {
+                setSubscribeKey(activeKey)
+              }}
+              tabBarExtraContent={{
+                right: tabBarExtraContent,
+              }}
+            >
+              {subscribeTabs.map((pane) => (
+                <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
+                  <Subscribe />
+                </TabPane>
+              ))}
+            </Tabs>
+          </Card>
+        </Col>
+      </Row>
+    </PageContainer>
+  );
 }
-
-export default connect(
-  ({ Connect: ConnectState, loading }: any) => ({
-    client: ConnectState.client,
-    loading,
-  }),
-  null,
-  null,
-  { forwardRef: true },
-)(StompClient);

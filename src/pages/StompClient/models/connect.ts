@@ -1,26 +1,29 @@
-import { ConnectModelType } from '@/models/connect';
 import { Client } from 'stompjs';
+import { useCallback, useState } from "react";
 
 interface State {
-  client: Client | null
-  connecting: boolean
+  // Stomp客户端
+  client: Client | null;
+  // 是否正在连接
+  connecting: boolean;
 }
 
-const ConnectModel: ConnectModelType<State> = {
-  namespace: 'Connect',
-  state: {
-    client: null,
-    connecting: false,
-  },
-  effects: {
-    * state({ payload }, { put }) {
-      yield put({ type: 'setState', payload });
-    },
-  },
-  reducers: {
-    setState(state, { payload }) {
-      return { ...state, ...payload } as State;
-    },
-  },
+const initialState: State = {
+  client: null,
+  connecting: false,
+}
+
+export default () => {
+  // Stomp连接状态
+  const [state, setState] = useState(initialState);
+
+  const setClient = useCallback((client: Client | null) => {
+    setState({ ...state, client })
+  }, []);
+
+  return {
+    state,
+    setState,
+    setClient
+  }
 };
-export default ConnectModel;
