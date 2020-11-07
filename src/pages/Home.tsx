@@ -3,7 +3,7 @@ import { Card, Col, Row, Typography } from 'antd';
 import { ConnectProps } from '@@/plugin-dva/connect';
 import { connect, history, Link } from 'umi';
 import { Helmet } from '@@/plugin-helmet/exports';
-import { DefaultSettings } from '../../config/defaultSettings'
+import { DefaultSettings } from '../../config/defaultSettings';
 
 interface Props extends ConnectProps {
   settings: DefaultSettings | null;
@@ -39,6 +39,13 @@ class Home extends React.Component<Props, any> {
             <Link to="/utils/JsonView">
               <Card hoverable bordered>
                 <Card.Meta title="Json 展示" description="在线 Json 格式化展示" />
+              </Card>
+            </Link>
+          </Col>
+          <Col span={4}>
+            <Link to="/utils/Highlight">
+              <Card hoverable bordered>
+                <Card.Meta title="代码高亮" description="Highlight 代码高亮" />
               </Card>
             </Link>
           </Col>
