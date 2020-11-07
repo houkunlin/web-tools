@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Card, Col, Dropdown, Menu, Row, Tabs } from 'antd';
-import './index.less';
 import { v4 as uuid } from 'uuid';
 import { PageContainer } from '@ant-design/pro-layout';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
@@ -123,7 +122,7 @@ export default () => {
       <Card>
         <Connect />
       </Card>
-      <Row gutter={20}>
+      <Row gutter={20} style={{ marginTop: 20 }}>
         <Col span={10}>
           <Card>
             <Tabs
