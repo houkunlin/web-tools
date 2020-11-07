@@ -1,7 +1,6 @@
 import React from 'react';
 import { createFromIconfontCN, LinkOutlined } from '@ant-design/icons';
 import { DefaultFooter } from '@ant-design/pro-layout';
-import './index.less';
 
 const IconFont = createFromIconfontCN({
   scriptUrl: [
