@@ -2,8 +2,9 @@ import './index.less';
 import { PageContainer } from '@ant-design/pro-layout';
 import React, { useEffect, useState } from 'react';
 import highlight from 'highlight.js';
-import { Card, Input, Select } from 'antd';
+import { Button, Card, Input, Select, Tag } from 'antd';
 import { Helmet } from '@@/plugin-helmet/exports';
+import RightBottom from '@/components/RightBottom';
 
 const languages = [
   {
@@ -197,6 +198,13 @@ export default () => {
           dangerouslySetInnerHTML={{ __html: result?.value || '' }}
         />
       </pre>
+      <RightBottom title="涉及技术">
+        <Tag color="#108ee9">
+          <Button type="link" target="_blank" href="https://www.npmjs.com/package/highlight.js">
+            highlight.js
+          </Button>
+        </Tag>
+      </RightBottom>
     </PageContainer>
   );
 };

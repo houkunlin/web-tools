@@ -1,7 +1,8 @@
 import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Button, Card, Col, Form, Input, message, Row } from 'antd';
+import { Button, Card, Col, Form, Input, message, Row, Tag } from 'antd';
 import ReactJson from 'react-json-view';
+import RightBottom from '@/components/RightBottom';
 
 interface State {
   content: object;
@@ -45,6 +46,17 @@ class JsonView extends React.Component<any, State> {
             </Card>
           </Col>
         </Row>
+        <RightBottom title="涉及技术">
+          <Tag color="#108ee9">
+            <Button
+              type="link"
+              target="_blank"
+              href="https://www.npmjs.com/package/react-json-view"
+            >
+              react-json-view
+            </Button>
+          </Tag>
+        </RightBottom>
       </PageContainer>
     );
   }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Card, Col, Dropdown, Menu, Row, Tabs } from 'antd';
+import { Button, Card, Col, Dropdown, Menu, Row, Tabs, Tag } from 'antd';
 import { v4 as uuid } from 'uuid';
 import { PageContainer } from '@ant-design/pro-layout';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { useModel } from '@@/plugin-model/useModel';
+import RightBottom from '@/components/RightBottom';
 import Connect from './Connect';
 import Send from './Send';
 import Subscribe from './Subscribe';
@@ -163,6 +164,18 @@ export default () => {
           </Card>
         </Col>
       </Row>
+      <RightBottom title="涉及技术">
+        <Tag color="#108ee9">
+          <Button type="link" target="_blank" href="https://www.npmjs.com/package/stompjs">
+            stompjs
+          </Button>
+        </Tag>
+        <Tag color="#108ee9">
+          <Button type="link" target="_blank" href="https://www.npmjs.com/package/sockjs-client">
+            sockjs-client
+          </Button>
+        </Tag>
+      </RightBottom>
     </PageContainer>
   );
 };
