@@ -10,6 +10,12 @@ export default defineConfig({
   history: {
     type: 'hash',
   },
+  copy: [
+    {
+      from: 'node_modules/highlight.js/styles/',
+      to: 'highlight.js/',
+    },
+  ],
   antd: {
     // 开启暗色主题。
     dark: false,
@@ -78,6 +84,11 @@ export default defineConfig({
           path: 'JsonView',
           name: 'JsonView',
           component: './JsonView',
+        },
+        {
+          path: 'Highlight',
+          name: 'Highlight',
+          component: './Highlight',
         },
       ],
     },
