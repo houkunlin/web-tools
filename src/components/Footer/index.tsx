@@ -5,7 +5,7 @@ import { DefaultFooter } from '@ant-design/pro-layout';
 const IconFont = createFromIconfontCN({
   scriptUrl: [
     "//at.alicdn.com/t/font_2171248_tekhmru6ev.js",
-    "/icon-icp.js",
+    "./icon-icp.js",
   ]
 })
 

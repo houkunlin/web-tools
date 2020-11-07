@@ -145,7 +145,7 @@ export default () => {
   return (
     <PageContainer>
       <Helmet>
-        <link rel="stylesheet" type="text/css" href={`/highlight.js/${theme}.css`} />
+        <link rel="stylesheet" type="text/css" href={`./highlight.js/${theme}.css`} />
       </Helmet>
       <Card>
         <Select
