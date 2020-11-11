@@ -6,13 +6,18 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { ResponseError } from 'umi-request';
 // import { queryCurrent } from './services/user';
-import defaultSettings from '../config/defaultSettings';
+import defaultSettings, { DefaultSettings } from '../config/defaultSettings';
 
-export async function getInitialState(): Promise<{
-  settings?: LayoutSettings;
+/**
+ * 初始化数据的格式类型
+ */
+export interface InitialStateType {
+  settings?: LayoutSettings & DefaultSettings;
   currentUser?: API.CurrentUser;
   fetchUserInfo: () => Promise<API.CurrentUser | undefined>;
-}> {
+}
+
+export async function getInitialState(): Promise<InitialStateType> {
   const fetchUserInfo = async () => {
     // try {
     //   return await queryCurrent();
@@ -36,11 +41,7 @@ export async function getInitialState(): Promise<{
   };
 }
 
-export const layout = ({
-  initialState,
-}: {
-  initialState: { settings?: LayoutSettings; currentUser?: API.CurrentUser };
-}): BasicLayoutProps => {
+export const layout = ({ initialState }: { initialState: InitialStateType }): BasicLayoutProps => {
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
