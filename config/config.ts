@@ -2,6 +2,7 @@
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
+import routes from './routes';
 
 const { REACT_APP_ENV } = process.env;
 
@@ -54,53 +55,7 @@ export default defineConfig({
     ie: 11,
   },
   // umi routes: https://umijs.org/docs/routing
-  routes: [
-    {
-      path: '/user',
-      layout: false,
-      routes: [
-        {
-          name: 'login',
-          path: '/user/login',
-          component: './user/login',
-        },
-      ],
-    },
-    {
-      path: '/index',
-      name: 'home',
-      component: './Home',
-    },
-    {
-      path: 'utils',
-      name: 'utils',
-      icon: 'aim',
-      routes: [
-        {
-          path: 'StompClient',
-          name: 'StompClient',
-          component: './StompClient',
-        },
-        {
-          path: 'JsonView',
-          name: 'JsonView',
-          component: './JsonView',
-        },
-        {
-          path: 'Highlight',
-          name: 'Highlight',
-          component: './Highlight',
-        },
-      ],
-    },
-    {
-      path: '/',
-      redirect: '/index',
-    },
-    {
-      component: './404',
-    },
-  ],
+  routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     // ...darkTheme,
