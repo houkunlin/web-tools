@@ -38,6 +38,7 @@ export default defineConfig({
     // 产品名，默认值为包名。Default: name in package.json
     name: defaultSettings.siteTitle,
     locale: true,
+    siderWidth: 208,
     ...defaultSettings,
   },
   locale: {
@@ -49,7 +50,7 @@ export default defineConfig({
   },
   // 启用按需加载
   dynamicImport: {
-    loading: '@/components/PageLoading/index',
+    loading: '@ant-design/pro-layout/es/PageLoading',
   },
   targets: {
     ie: 11,
@@ -61,14 +62,13 @@ export default defineConfig({
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
   },
-  // @ts-ignore
+  // 使用 esbuild 作为压缩器。
+  esbuild: {},
   title: false,
   ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'dev'],
   // 为所有非三方脚本加上 crossorigin="anonymous" 属性，通常用于统计脚本错误。
   // crossorigin: true,
-  // 使用 esbuild 作为压缩器。
-  // esbuild: {},
   manifest: {
     // 默认会使用 webpack 的 output.publicPath 配置
     // publicPath: '/',
@@ -92,9 +92,9 @@ export default defineConfig({
   // 设置路由前缀，通常用于部署到非根目录。比如，你有路由 / 和 /users，然后设置了 base 为 /foo/，那么就可以通过 /foo/ 和 /foo/users 访问到之前的路由。
   // base: '.',
   // https://umijs.org/zh-CN/docs/deployment#html-%E5%90%8E%E7%BC%80
-  // exportStatic: {
-  //   htmlSuffix: true,
-  // },
+  exportStatic: {
+    //   htmlSuffix: true,
+  },
   devServer: {
     port: 3000,
   },

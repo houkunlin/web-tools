@@ -1,7 +1,8 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
 export interface DefaultSettings extends LayoutSettings {
-  pwa: boolean;
+  pwa?: boolean;
+  logo?: string;
   /**
    * 网站名称、网站标题、首页标题
    */
