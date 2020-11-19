@@ -1,5 +1,5 @@
 import { Client } from 'stompjs';
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 interface State {
   // Stomp客户端
@@ -8,22 +8,23 @@ interface State {
   connecting: boolean;
 }
 
-const initialState: State = {
-  client: null,
-  connecting: false,
-}
-
 export default () => {
   // Stomp连接状态
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState<State>({
+    client: null,
+    connecting: false,
+  });
 
-  const setClient = useCallback((client: Client | null) => {
-    setState({ ...state, client })
-  }, []);
+  const setClient = useCallback(
+    (client: Client | null) => {
+      setState({ ...state, client });
+    },
+    [state],
+  );
 
   return {
     state,
     setState,
-    setClient
-  }
+    setClient,
+  };
 };
