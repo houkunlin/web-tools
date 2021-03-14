@@ -1,26 +1,39 @@
 import React from 'react';
-import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
+import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
+import { PageLoading } from '@ant-design/pro-layout';
 import { notification } from 'antd';
-import { history, RequestConfig } from 'umi';
+import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
+import { history } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import { ResponseError } from 'umi-request';
-// import { queryCurrent } from './services/user';
-import defaultSettings, { DefaultSettings } from '../config/defaultSettings';
+import type { ResponseError } from 'umi-request';
+// import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import defaultSettings from '../config/defaultSettings';
+import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+
+const isDev = process.env.NODE_ENV === 'development';
+
+/** 获取用户信息比较慢的时候会展示一个 loading */
+export const initialStateConfig = {
+  loading: <PageLoading />,
+};
 
 /**
  * 初始化数据的格式类型
  */
 export interface InitialStateType {
-  settings?: LayoutSettings & DefaultSettings;
+  settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   fetchUserInfo: () => Promise<API.CurrentUser | undefined>;
 }
 
+/**
+ * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
+ * */
 export async function getInitialState(): Promise<InitialStateType> {
   const fetchUserInfo = async () => {
     // try {
-    //   return await queryCurrent();
+    //   return await queryCurrentUser();
     // } catch (error) {
     //   history.push('/user/login');
     // }
@@ -41,7 +54,8 @@ export async function getInitialState(): Promise<InitialStateType> {
   };
 }
 
-export const layout = ({ initialState }: { initialState: InitialStateType }): BasicLayoutProps => {
+// https://umijs.org/zh-CN/plugins/plugin-layout
+export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
@@ -54,7 +68,33 @@ export const layout = ({ initialState }: { initialState: InitialStateType }): Ba
       //   history.push('/user/login');
       // }
     },
+    links: isDev
+      ? [
+          <>
+            <LinkOutlined />
+            <span
+              onClick={() => {
+                window.open('/umi/plugin/openapi');
+              }}
+            >
+              openAPI 文档
+            </span>
+          </>,
+          <>
+            <BookOutlined />
+            <span
+              onClick={() => {
+                window.open('/~docs');
+              }}
+            >
+              业务组件文档
+            </span>
+          </>,
+        ]
+      : [],
     menuHeaderRender: undefined,
+    // 自定义 403 页面
+    // unAccessible: <div>unAccessible</div>,
     ...initialState?.settings,
   };
 };
@@ -80,6 +120,7 @@ const codeMessage = {
 
 /**
  * 异常处理程序
+ * @see https://beta-pro.ant.design/docs/request-cn
  */
 const errorHandler = (error: ResponseError) => {
   const { response } = error;
@@ -102,6 +143,7 @@ const errorHandler = (error: ResponseError) => {
   throw error;
 };
 
+// https://umijs.org/zh-CN/plugins/plugin-request
 export const request: RequestConfig = {
   errorHandler,
 };

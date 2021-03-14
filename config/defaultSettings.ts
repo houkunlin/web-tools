@@ -1,15 +1,13 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
-export interface DefaultSettings extends LayoutSettings {
+const Settings: LayoutSettings & {
   pwa?: boolean;
   logo?: string;
   /**
    * 网站名称、网站标题、首页标题
    */
   siteTitle: string;
-}
-
-export default {
+} = {
   navTheme: 'light',
   // 拂晓蓝
   primaryColor: '#1890ff',
@@ -27,4 +25,6 @@ export default {
   logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
   splitMenus: false,
-} as DefaultSettings;
+};
+
+export default Settings;

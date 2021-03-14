@@ -1,5 +1,6 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
+import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
@@ -34,13 +35,14 @@ export default defineConfig({
     // skipModelValidate: true,
   },
   layout: {
-    // https://umijs.org/zh-CN/plugins/plugin-layout#name
+    // https://umijs.org/zh-CN/plugins/plugin-layout
     // 产品名，默认值为包名。Default: name in package.json
     name: defaultSettings.siteTitle,
     locale: true,
     siderWidth: 208,
     ...defaultSettings,
   },
+  // https://umijs.org/zh-CN/plugins/plugin-locale
   locale: {
     // default zh-CN
     default: 'zh-CN',
@@ -63,6 +65,8 @@ export default defineConfig({
     'primary-color': defaultSettings.primaryColor,
   },
   // 使用 esbuild 作为压缩器。
+  // esbuild is father build tools
+  // https://umijs.org/plugins/plugin-esbuild
   esbuild: {},
   title: false,
   ignoreMomentLocale: true,
@@ -97,5 +101,12 @@ export default defineConfig({
   },
   devServer: {
     port: 3000,
+  },
+  openAPI: {
+    requestLibPath: "import { request } from 'umi'",
+    // 或者使用在线的版本
+    // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
+    schemaPath: join(__dirname, 'oneapi.json'),
+    mock: false,
   },
 });
