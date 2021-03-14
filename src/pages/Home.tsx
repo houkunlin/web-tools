@@ -8,6 +8,9 @@ import './Home.less';
 export default () => {
   const { initialState } = useModel('@@initialState');
   const { settings } = initialState || {};
+  // 这个 siteTitle 是在 defaultSettings.ts 中自定义配置的，没有提供类型，因此这个报了检查警告
+  // @ts-ignore
+  const siteTitle = settings?.siteTitle;
   const [colProps] = useState({
     span: 4,
     xs: 24,
@@ -15,13 +18,13 @@ export default () => {
     md: 12,
     lg: 6,
     xl: 4,
-    style: { marginTop: 10 }
-  })
+    style: { marginTop: 10 },
+  });
 
   return (
     <>
       <Helmet>
-        <title>{settings?.siteTitle}</title>
+        <title>{siteTitle}</title>
       </Helmet>
       <Row>
         <Col span={24}>
@@ -29,21 +32,21 @@ export default () => {
         </Col>
       </Row>
       <Row gutter={10}>
-        <Col  {...colProps}>
+        <Col {...colProps}>
           <Link to="/utils/StompClient">
             <Card hoverable bordered>
               <Card.Meta title="Stomp 客户端" description="在线 Stomp 客户端" />
             </Card>
           </Link>
         </Col>
-        <Col  {...colProps}>
+        <Col {...colProps}>
           <Link to="/utils/JsonView">
             <Card hoverable bordered>
               <Card.Meta title="Json 展示" description="在线 Json 格式化展示" />
             </Card>
           </Link>
         </Col>
-        <Col  {...colProps}>
+        <Col {...colProps}>
           <Link to="/utils/Highlight">
             <Card hoverable bordered>
               <Card.Meta title="代码高亮" description="Highlight 代码高亮" />
