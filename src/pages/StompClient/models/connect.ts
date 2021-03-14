@@ -1,4 +1,4 @@
-import { Client } from 'stompjs';
+import type { Client } from 'stompjs';
 import { useCallback, useState } from 'react';
 
 interface State {

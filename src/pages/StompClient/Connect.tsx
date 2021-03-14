@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
 import { Button, Form, Input, message, Spin, Tabs } from 'antd';
-import { Headers } from '@/pages/StompClient/Headers';
-import { FormInstance } from 'antd/lib/form';
-import Stomp, { Frame } from 'stompjs';
+import Headers from '@/pages/StompClient/Headers';
+import type { FormInstance } from 'antd/lib/form';
+import type { Frame } from 'stompjs';
+import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { useModel } from '@@/plugin-model/useModel';
 
@@ -16,6 +17,7 @@ export default () => {
   // 连接服务器事件
   const onConnect = (values: any) => {
     const { url = '' } = values;
+    // @ts-ignore
     const headers: any = headerRef.current?.result() || {};
     const account = formRef.current?.getFieldsValue() || {};
     setState({ connecting: true, client: null });
