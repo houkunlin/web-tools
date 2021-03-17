@@ -109,4 +109,9 @@ export default defineConfig({
     schemaPath: join(__dirname, 'oneapi.json'),
     mock: false,
   },
+  // 编译提速 https://umijs.org/zh-CN/guide/boost-compile-speed
+  nodeModulesTransform: {
+    type: 'none',
+    exclude: [],
+  },
 });
